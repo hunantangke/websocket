@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>socket.io</title>
+</head>
+
+<body>
+    <!-- 需要引入的js -->
+    <script src="./socket.io-2.0.4.js"></script>
+    <script>
+    // server地址
+    var socket = io('http://localhost:3000');
+    // 获取server发送过来的消息(事件名；回调函数对信息处理)
+    socket.on('news', function(data) {
+        console.log(data);
+        // 向server发送消息(自定义事件名；直接发送对象信息)
+        socket.emit('my other event', {
+            my: 'tangke'
+        });
+    });
+    </script>
+</body>
+
+</html>

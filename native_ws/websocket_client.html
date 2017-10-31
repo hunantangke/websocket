@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket</title>
+</head>
+<body>
+    <h1>Chat Room</h1>
+    <input type="text" id="sendTxt">
+    <button id="sendBtn">发送</button>
+
+    <script type="text/javascript">
+        var ws = new WebSocket("ws://localhost:3000")
+
+        // 发送消息函数
+        function showMessage(str, msg_type) {
+            var div = document.createElement('div')
+            div.innerHTML = str
+
+            // 通过msg_type进行判断消息的类型
+            if(msg_type === "enter") {
+                div.style.color = "blue"
+            } else if(msg_type === "left") {
+                div.style.color = "red"
+            }
+            document.body.appendChild(div);
+        }
+
+        ws.onopen = function() {
+            console.log("websocket open")
+            document.getElementById('sendBtn').onclick = function() {
+                var txt = document.getElementById('sendTxt').value
+                if(txt) {
+                    ws.send(txt)
+                }
+            }
+        }
+        ws.onclose = function() {
+            console.log("websocket close");
+        }
+
+        // 从server接收的消息
+        ws.onmessage = function(e) {
+            console.log(e.data)
+
+            // 接收到的消息反格式化
+            var msg = JSON.parse(e.data)
+            showMessage(msg.data, msg.type)
+        }
+    </script>
+</body>
+</html>
